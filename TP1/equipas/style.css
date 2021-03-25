@@ -1,0 +1,23 @@
+html {
+    background-color: rgb(75, 52, 41);
+    color:aliceblue;
+}
+
+h1,h2,h3 {
+    text-align: center;
+}
+
+.atletas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.atleta {
+    background-color: rgb(44, 97, 94);
+    padding: 10px;
+    margin: 15px;
+    width: 20%;
+    border-style: solid;
+    border-radius: 15px;
+}
