@@ -1,6 +1,8 @@
 html {
-    background-color: rgb(75, 52, 41);
-    color:aliceblue;
+    background: linear-gradient(#420690,#640c96,#9725a5,#d24bb1,#ff69b4);
+    color:#f47575;
+    font-family:fantasy;
+    min-height: 100%;
 }
 
 h1,h2,h3 {
@@ -14,7 +16,10 @@ h1,h2,h3 {
 }
 
 .atleta {
-    background-color: rgb(44, 97, 94);
+    /*background-color: #ffccf5;
+    color: #7e3a70;*/
+    background: linear-gradient(to right, #ff218c, #ffd800, #21b1ff);
+    color:black;
     padding: 10px;
     margin: 15px;
     width: 20%;

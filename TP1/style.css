@@ -1,6 +1,8 @@
 html {
-    background-color: rgb(44, 44, 44);
-    color:aliceblue;
+    background: linear-gradient(#ffccf5,#eacdff,#d5cfff,#d3dfff,#caf0ff);
+    color: #ff339a;
+    font-family:fantasy;
+    min-height: 100%;
 }
 
 h1,h2,h3 {
@@ -15,13 +17,16 @@ h1,h2,h3 {
 
 .equipa {
     flex-grow: 1;
-    width: 0;
     display: block;
-    background-color: rgb(110, 57, 33);
+    /*background-color:#ffa4d2;
+    color: #ff339a;*/
+    background: linear-gradient(to right, #ff218c, #ffd800, #21b1ff);
+    color: black;
     padding: 10px;
-    width: 300px;
+    width: 250px;
     border-style: solid;
-    border-radius: 15px;
+    border-radius: 8px;
+    min-height: 225px;
 }
 
 a {
@@ -29,11 +34,11 @@ a {
 }
 
 a:link {
-    color: aliceblue;
+    color: #f2d6d6;
     text-decoration: none;
 }
 
 a:visited {
-    color: aliceblue;
+    color: #f2d6d6;
     text-decoration: none;
 }
