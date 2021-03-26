@@ -31,14 +31,5 @@ h1,h2,h3 {
 
 a {
     margin: 15px;
-}
-
-a:link {
-    color: #f2d6d6;
-    text-decoration: none;
-}
-
-a:visited {
-    color: #f2d6d6;
     text-decoration: none;
 }
