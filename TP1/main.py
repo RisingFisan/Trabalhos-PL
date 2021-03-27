@@ -75,17 +75,20 @@ Escolha a opção pretendida: """).strip()
             if re.match(r'(\w+)', inscrito["escalao"]):
                 x = esc_dict.get(inscrito["escalao"],0)
                 esc_dict[inscrito["escalao"]] = x+1
-        for key, value in esc_dict.items():
-	        print("Escalão:", key, "; Número de atletas:", value)
+        for escalao in sorted(esc_dict):
+	        print("Escalão:", escalao, "; Número de atletas:", esc_dict[escalao])
 
     elif opt == '5': # alinea e
         equipas = dict()
+        provas = dict()
         for inscrito in inscritos:
+            prova = inscrito["prova"]
             equipa = inscrito["equipa"]
             if equipa not in [",","n/d","s/ clube"]:
                 equipas.setdefault(equipa.upper(), list()).append(inscrito)
+                provas.setdefault(prova, dict()).setdefault(equipa.upper(), list()).append(inscrito)
             else:
-                equipas.setdefault("INDIVIDUAL", list()).append(inscrito)
+                provas.setdefault(prova, dict()).setdefault("INDIVIDUAL", list()).append(inscrito)
         with open("equipas.html","w", encoding="utf-8") as f:
             f.write("""<!DOCTYPE html>\n
 <html>
@@ -94,55 +97,64 @@ Escolha a opção pretendida: """).strip()
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-    <h1>EQUIPAS</h1>
-    <div class="equipas">
+    <h1>PROVAS</h1>
+    <div class="provas">
 """)
 
 
 
-
-            for equipa in sorted(equipas.keys(), key=lambda x : len(equipas[x]), reverse=True):
-                with open(f"equipas/{''.join(x for x in equipa if x.isalnum())}.html","w",encoding="utf-8") as ff:
-                    ff.write(f"""<!DOCTYPE html>
-<html>
-    <head>
-        <title>{equipa}</title>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <h1>Equipa: {equipa}</h1>
-        <h2>{len(equipas[equipa])} atletas</h2>
-        <div class="atletas">
+            for prova in provas:
+                f.write(f"""    <div class="prova">
+        <h2>{prova}</h2>
 """)
-
-
-
-
-                    for atleta in equipas[equipa]:
-                        ff.write(f"""            <div class="atleta">
-                <h3>{atleta["nome"]}</h3>
-                <ul>
-                    <li>Escalão: {atleta["escalao"] or "-"}</li>
-                    <li>Prova: {atleta["prova"]}</li>
-                </ul>
-                </div>
-""")
-                    ff.write("""        </div>
-    </body>
-</html>
-""")
-                    
-                f.write(f"""        <a href="./equipas/{''.join(x for x in equipa if x.isalnum())}.html">
+                for equipa in sorted(provas[prova].keys(), key=lambda x : len(provas[prova][x]), reverse=True):
+                    f.write(f"""        <a href="./equipas/{''.join(x for x in equipa if x.isalnum())}.html">
             <span class="equipa">
                 <h2>{equipa}</h2>
-                <h3>{len(equipas[equipa])} atleta{'s' if len(equipas[equipa]) > 1 else ''}</h3>
+                <h3>{len(provas[prova][equipa])} atleta{'s' if len(provas[prova][equipa]) > 1 else ''}</h3>
             </span>
         </a>
 """)
+
+                f.write("    </div>\n")
             f.write("""    </div>
     </body>
 </html>
 """)
+
+        for equipa in equipas:
+            with open(f"equipas/{''.join(x for x in equipa if x.isalnum())}.html","w",encoding="utf-8") as ff:
+                ff.write(f"""<!DOCTYPE html>
+    <html>
+        <head>
+            <title>{equipa}</title>
+            <link rel="stylesheet" href="style.css">
+        </head>
+        <body>
+            <h1>{"Equipa: " + equipa if equipa != "INDIVIDUAL" else "Atletas sem equipa"}</h1>
+            <h2>{len(equipas[equipa])} atletas</h2>
+            <div class="atletas">
+    """)
+
+
+
+
+                for atleta in equipas[equipa]:
+                    ff.write(f"""            <div class="atleta">
+                    <h3>{atleta["nome"]}</h3>
+                    <ul>
+                        <li>Escalão: {atleta["escalao"] or "-"}</li>
+                        <li>Prova: {atleta["prova"]}</li>
+                    </ul>
+                    </div>
+    """)
+                ff.write("""        </div>
+        </body>
+    </html>
+    """)
+
+
+
 
         print("\nFicheiro HTML gerado com sucesso!")
 

@@ -1,18 +1,28 @@
 html {
-    background: linear-gradient(#ffccf5,#eacdff,#d5cfff,#d3dfff,#caf0ff);
-    color: #ff339a;
+    background: #5bcefa;
+    color: #166888;
     font-family:fantasy;
     min-height: 100%;
 }
 
 h1,h2,h3 {
     text-align: center;
+    width: 100%;
 }
 
-.equipas {
+.provas {
+    display: flex;
+    flex-direction: column; 
+}
+
+.prova {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    background: #f5a9b8;
+    color: #97273e;
+    border-radius: 20px;
+    margin: 50px;
 }
 
 .equipa {
@@ -20,13 +30,12 @@ h1,h2,h3 {
     display: block;
     /*background-color:#ffa4d2;
     color: #ff339a;*/
-    background: linear-gradient(to right, #ff218c, #ffd800, #21b1ff);
-    color: black;
+    background: white;
+    color: rgb(82, 82, 82);
     padding: 10px;
     width: 250px;
-    border-style: solid;
     border-radius: 8px;
-    min-height: 225px;
+    min-height: 200px;
 }
 
 a {
