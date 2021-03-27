@@ -1,5 +1,6 @@
 import re
 import sys
+from functools import reduce
 
 fp = None
 inscritos = list()
@@ -29,11 +30,11 @@ for inscrito in lista_inscritos:
             insc_dict[m.group(1)] = m.group(2)
     inscritos.append(insc_dict)
 
-print("\nFicheiro carregado com sucesso!\n")
+print("\nFicheiro carregado com sucesso!")
 
 while True:
-    opt = input("""1) Nomes dos concorrentes individuais de Valongo.
-2) Nome, nº e prova dos concorrentes chamados \"Paulo\" ou \"Ricardo\" que usam o GMail.
+    opt = input("""\n1) Nomes dos concorrentes individuais de Valongo.
+2) Nome, email e prova dos concorrentes chamados \"Paulo\" ou \"Ricardo\" que usam o GMail.
 3) Informação dos atletas da equipa \"TURBULENTOS\"
 4) Lista ordenada de escalões e atletas por escalão.
 5) Gerar página HTML com informação.\n
@@ -42,21 +43,31 @@ Escolha a opção pretendida: """).strip()
     if opt == '0': break
 
     elif opt == '1': # alinea a
-        print("Nomes dos concorrentes individuais de Valongo:")
+        print("\nNomes dos concorrentes individuais de Valongo:")
         for inscrito in inscritos:
-            if (m := re.match(r'(?i:individual)',inscrito["equipa"])) and "Valongo" in inscrito["morada"]:
+            if (m := re.match(r'(?i:individual)',inscrito["equipa"])) and (n := re.search(r'(?i:valongo)',inscrito["morada"])):
                 print("-", inscrito["nome"].upper())
 
     elif opt == '2': #alinea b
+        print("\nNome, email e prova dos concorrentes chamados \"Paulo\" ou \"Ricardo\" que usam o GMail:")
         for inscrito in inscritos:
             if m := re.search(r'@gmail\.com$', inscrito["email"]):
-                if o := re.search(r'(Paulo|Ricardo)', inscrito["nome"]):
-                    print(f'Nome: {inscrito["nome"]};\nProva: {inscrito["prova"]}\n')
+                if o := re.match(r'(?i:Paulo|Ricardo)', inscrito["nome"]):
+                    print(f'- {inscrito["nome"]}; {inscrito["email"]}; {inscrito["prova"]}')
 
     elif opt == '3': # alinea c
+        turbulentos = list()
         for inscrito in inscritos:
             if m := re.fullmatch(r'(?i:turbulentos)',inscrito["equipa"]):
-                print(f'\nNome: {inscrito["nome"]};\nData de nascimento: {inscrito["dataNasc"]};\nMorada: {inscrito["morada"]};\nEmail: {inscrito["email"]};\nProva: {inscrito["prova"]};\nEscalão: {inscrito["escalao"]}')
+                turbulentos.append(inscrito)
+        i = 0
+        while True:
+            print(f'\nNome: {turbulentos[i]["nome"]};\nData de nascimento: {turbulentos[i]["dataNasc"]};\nMorada: {turbulentos[i]["morada"]};\nEmail: {turbulentos[i]["email"]};\nProva: {turbulentos[i]["prova"]};\nEscalão: {turbulentos[i]["escalao"]}')
+            print(f"\nPágina {i+1} de {len(turbulentos)}\n\n[a] ver anterior; [s] ver seguinte; [e] sair")
+            opt = input()
+            if opt == 'a' and i > 0: i -= 1
+            elif opt == 's' and i < len(turbulentos) - 1: i += 1
+            elif opt == 'e': break
 
     elif opt == '4': #alinea d --- lista dos escalões ordem alfabética, para cada um indicar #atletas inscritos nesse escalão.   
         esc_dict = dict()
@@ -87,6 +98,9 @@ Escolha a opção pretendida: """).strip()
     <div class="equipas">
 """)
 
+
+
+
             for equipa in sorted(equipas.keys(), key=lambda x : len(equipas[x]), reverse=True):
                 with open(f"equipas/{''.join(x for x in equipa if x.isalnum())}.html","w",encoding="utf-8") as ff:
                     ff.write(f"""<!DOCTYPE html>
@@ -100,6 +114,10 @@ Escolha a opção pretendida: """).strip()
         <h2>{len(equipas[equipa])} atletas</h2>
         <div class="atletas">
 """)
+
+
+
+
                     for atleta in equipas[equipa]:
                         ff.write(f"""            <div class="atleta">
                 <h3>{atleta["nome"]}</h3>
@@ -125,6 +143,7 @@ Escolha a opção pretendida: """).strip()
     </body>
 </html>
 """)
+
         print("\nFicheiro HTML gerado com sucesso!")
 
     else:
