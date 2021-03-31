@@ -1,6 +1,7 @@
 import re
 import sys
-from functools import reduce
+from datetime import datetime, timedelta
+import similar
 
 fp = None
 inscritos = list()
@@ -37,7 +38,7 @@ while True:
 2) Nome, email e prova dos concorrentes chamados \"Paulo\" ou \"Ricardo\" que usam o GMail.
 3) Informação dos atletas da equipa \"TURBULENTOS\"
 4) Lista ordenada de escalões e atletas por escalão.
-5) Gerar página HTML com informação.\n
+5) Gerar página HTML com informação sobre provas e equipas.\n
 0) Sair.\n
 Escolha a opção pretendida: """).strip()
     if opt == '0': break
@@ -45,7 +46,7 @@ Escolha a opção pretendida: """).strip()
     elif opt == '1': # alinea a
         print("\nNomes dos concorrentes individuais de Valongo:")
         for inscrito in inscritos:
-            if (m := re.match(r'(?i:individual)',inscrito["equipa"])) and (n := re.search(r'(?i:valongo)',inscrito["morada"])):
+            if similar.similarity(inscrito["equipa"].lower(),"individual") < 2 and (n := re.search(r'(?i:valongo)',inscrito["morada"])):
                 print("-", inscrito["nome"].upper())
 
     elif opt == '2': #alinea b
@@ -79,14 +80,19 @@ Escolha a opção pretendida: """).strip()
 	        print("Escalão:", escalao, "; Número de atletas:", esc_dict[escalao])
 
     elif opt == '5': # alinea e
+        today = datetime.today()
         equipas = dict()
         provas = dict()
-        for inscrito in inscritos:
+        for i, inscrito in enumerate(inscritos):
             prova = inscrito["prova"]
-            equipa = inscrito["equipa"]
-            if equipa not in [",","n/d","s/ clube"]:
-                equipas.setdefault(equipa.upper(), list()).append(inscrito)
-                provas.setdefault(prova, dict()).setdefault(equipa.upper(), list()).append(inscrito)
+            equipa = inscrito["equipa"].upper()
+            for eqp in equipas:
+                if similar.similarity(eqp.upper(),equipa) < 2:
+                    equipa = eqp.upper()
+                    break
+            if not (m := re.match(r',|N/D|S/ CLUBE', equipa)):
+                equipas.setdefault(equipa, list()).append(inscrito)
+                provas.setdefault(prova, dict()).setdefault(equipa, list()).append(inscrito)
             else:
                 provas.setdefault(prova, dict()).setdefault("INDIVIDUAL", list()).append(inscrito)
         with open("equipas.html","w", encoding="utf-8") as f:
@@ -110,8 +116,8 @@ Escolha a opção pretendida: """).strip()
                 for equipa in sorted(provas[prova].keys(), key=lambda x : len(provas[prova][x]), reverse=True):
                     f.write(f"""        <a href="./equipas/{''.join(x for x in equipa if x.isalnum())}.html">
             <span class="equipa">
-                <h2>{equipa}</h2>
-                <h3>{len(provas[prova][equipa])} atleta{'s' if len(provas[prova][equipa]) > 1 else ''}</h3>
+                <h2>{equipa if equipa != "INDIVIDUAL" else "Sem equipa"}</h2>
+                <div class="num_a"><p>{len(provas[prova][equipa])} atleta{'s' if len(provas[prova][equipa]) > 1 else ''}</p></div>
             </span>
         </a>
 """)
@@ -132,7 +138,7 @@ Escolha a opção pretendida: """).strip()
         </head>
         <body>
             <h1>{"Equipa: " + equipa if equipa != "INDIVIDUAL" else "Atletas sem equipa"}</h1>
-            <h2>{len(equipas[equipa])} atletas</h2>
+            <h2>Constituição: {len(equipas[equipa])} atleta{'s' if len(equipas[equipa]) != 1 else ''}</h2>
             <div class="atletas">
     """)
 
@@ -140,9 +146,15 @@ Escolha a opção pretendida: """).strip()
 
 
                 for atleta in equipas[equipa]:
+                    try:
+                        birth = datetime.strptime(atleta["dataNasc"],"%d/%m/%y")
+                        if birth > datetime.today(): birth = birth.replace(year = birth.year - 100)
+                    except ValueError:
+                        birth = None
                     ff.write(f"""            <div class="atleta">
                     <h3>{atleta["nome"]}</h3>
                     <ul>
+                        <li>Idade: {str(today.year - birth.year - ((today.month,today.day) < (birth.month,birth.day))) + " anos" if birth else "-"}</li>
                         <li>Escalão: {atleta["escalao"] or "-"}</li>
                         <li>Prova: {atleta["prova"]}</li>
                     </ul>

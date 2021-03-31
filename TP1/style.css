@@ -5,9 +5,17 @@ html {
     min-height: 100%;
 }
 
-h1,h2,h3 {
+h1,h2 {
     text-align: center;
     width: 100%;
+}
+
+.num_a {
+    position: absolute;
+    bottom: 0;
+    left: 0px;
+    right: 0px;
+    text-align: center;
 }
 
 .provas {
@@ -26,6 +34,7 @@ h1,h2,h3 {
 }
 
 .equipa {
+    position: relative;
     flex-grow: 1;
     display: block;
     /*background-color:#ffa4d2;
