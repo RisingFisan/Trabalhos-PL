@@ -52,11 +52,11 @@ Escolha a opção pretendida: """).strip()
             if similar.similarity(inscrito["equipa"].lower(),"individual") < 2 and (n := re.search(r'(?i:valongo)',inscrito["morada"])):
                 print("-", inscrito["nome"].upper())
 
-    elif opt == '2': #alinea b
+    elif opt == '2': # alinea b
         print("\nNome, email e prova dos concorrentes chamados \"Paulo\" ou \"Ricardo\" que usam o GMail:")
         for inscrito in inscritos:
             if m := re.search(r'@gmail\.com$', inscrito["email"]):
-                if o := re.match(r'(?i:Paulo|Ricardo)', inscrito["nome"]):
+                if o := re.search(r'(?i:Paulo|Ricardo)', inscrito["nome"]):
                     print(f'- {inscrito["nome"]}; {inscrito["email"]}; {inscrito["prova"]}')
 
     elif opt == '3': # alinea c
@@ -73,7 +73,7 @@ Escolha a opção pretendida: """).strip()
             elif opt == 's' and i < len(turbulentos) - 1: i += 1
             elif opt == 'e': break
 
-    elif opt == '4': #alinea d --- lista dos escalões ordem alfabética, para cada um indicar #atletas inscritos nesse escalão.   
+    elif opt == '4': # alinea d
         esc_dict = dict()
         for inscrito in inscritos:
             if re.match(r'(\w+)', inscrito["escalao"]):
