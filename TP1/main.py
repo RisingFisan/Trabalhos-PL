@@ -29,7 +29,10 @@ for inscrito in lista_inscritos:
         if linha_stripped:
             m = re.search(r'"(\w+)"\s*:\s*"(.*)"\s*,?',linha_stripped)
             insc_dict[m.group(1)] = m.group(2)
-    inscritos.append(insc_dict)
+
+    not_duplicate = all(any(similar.similarity(inscrito[key].lower(), insc_dict[key].lower()) > 2 for key in inscrito) for inscrito in inscritos)
+
+    if not_duplicate: inscritos.append(insc_dict)
 
 print("\nFicheiro carregado com sucesso!")
 
@@ -95,6 +98,11 @@ Escolha a opção pretendida: """).strip()
                 provas.setdefault(prova, dict()).setdefault(equipa, list()).append(inscrito)
             else:
                 provas.setdefault(prova, dict()).setdefault("INDIVIDUAL", list()).append(inscrito)
+
+# ------------------------------------------------------------------
+#                  FICHEIRO PROVAS
+# ------------------------------------------------------------------
+
         with open("equipas.html","w", encoding="utf-8") as f:
             f.write("""<!DOCTYPE html>\n
 <html>
@@ -106,8 +114,6 @@ Escolha a opção pretendida: """).strip()
     <h1>PROVAS</h1>
     <div class="provas">
 """)
-
-
 
             for prova in provas:
                 f.write(f"""    <div class="prova">
@@ -128,6 +134,10 @@ Escolha a opção pretendida: """).strip()
 </html>
 """)
 
+# ------------------------------------------------------------------
+#                  FICHEIROS EQUIPAS
+# ------------------------------------------------------------------
+
         for equipa in equipas:
             with open(f"equipas/{''.join(x for x in equipa if x.isalnum())}.html","w",encoding="utf-8") as ff:
                 ff.write(f"""<!DOCTYPE html>
@@ -140,15 +150,13 @@ Escolha a opção pretendida: """).strip()
             <h1>{"Equipa: " + equipa if equipa != "INDIVIDUAL" else "Atletas sem equipa"}</h1>
             <h2>Constituição: {len(equipas[equipa])} atleta{'s' if len(equipas[equipa]) != 1 else ''}</h2>
             <div class="atletas">
-    """)
-
-
-
+""")
 
                 for atleta in equipas[equipa]:
                     try:
-                        birth = datetime.strptime(atleta["dataNasc"],"%d/%m/%y")
-                        if birth > datetime.today(): birth = birth.replace(year = birth.year - 100)
+                        if "ou" not in atleta["dataNasc"]:
+                            birth = datetime.strptime(atleta["dataNasc"],"%d/%m/%y")
+                            if birth > datetime.today(): birth = birth.replace(year = birth.year - 100)
                     except ValueError:
                         birth = None
                     ff.write(f"""            <div class="atleta">
@@ -159,13 +167,11 @@ Escolha a opção pretendida: """).strip()
                         <li>Prova: {atleta["prova"]}</li>
                     </ul>
                     </div>
-    """)
+""")
                 ff.write("""        </div>
         </body>
     </html>
-    """)
-
-
+""")
 
 
         print("\nFicheiro HTML gerado com sucesso!")
