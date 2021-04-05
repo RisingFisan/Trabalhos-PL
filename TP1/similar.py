@@ -15,9 +15,6 @@ def similarity(word1 : str, word2 : str):
     if word1[0] == word2[0]:
         cache[(word1,word2)] = check0
         return check0
-    if check0 == max(len(word1[1:]),len(word2[1:])):
-        cache[(word1,word2)] = 1 + check0
-        return 1 + check0
     check1 = similarity(word1[1:], word2)
     if check1 < check0:
         cache[(word1,word2)] = 1 + check1
@@ -28,3 +25,6 @@ def similarity(word1 : str, word2 : str):
         return 1 + check2
     cache[(word1,word2)] = 1 + check0
     return 1 + check0
+
+if __name__ == "__main__":
+    print(similarity(input("Word 1:"), input("Word 2:")))
