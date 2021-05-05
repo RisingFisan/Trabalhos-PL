@@ -1,9 +1,17 @@
 import ply.lex as lex
 
+INT = 0
+FLOAT = 1
+STRING = 2
+
 class Lexer:
 
+    def __init__(self, fp : list):
+        self.fp = fp
+
     reserved = {
-        # 'int': 'DEFINT',
+        'int': 'INTKW',
+        'float': 'FLOATKW',
         'print': "PRINT",
         'or': 'OR',
         'and': 'AND',
@@ -15,7 +23,11 @@ class Lexer:
 
     tokens = [
         'INT',
+        'FLOAT',
         'ID',
+        'VAR',
+        'VARF',
+        'VARS',
         'POW',
         'GE',
         'LE',
@@ -26,15 +38,15 @@ class Lexer:
 
     literals = ['=','+','-','*','/','(',')','<','>',',',';','%','{','}']
 
+    def t_FLOAT(self, t):
+        r'(\d*)?\.\d+(e(?:\+|-)\d+)?'
+        t.value = float(t.value)
+        return t
+
     def t_INT(self, t):
         r'\d+'
         t.value = int(t.value)
         return t
-
-    # def t_FLOAT(self, t):
-    #     r'(\d*\.)?\d+(e(?:\+|-)\d+)?'
-    #     t.value = float(t.value)
-    #     return t
 
     t_POW = r'\*\*|\^'
     t_GE = r'>='
@@ -48,6 +60,12 @@ class Lexer:
     def t_ID(self, t):
         r'[a-zA-Z_][a-zA-Z0-9_\']*'
         t.type = Lexer.reserved.get(t.value,"ID")
+        for var,vartype in self.fp:
+            if var == t.value:
+                if vartype == INT: t.type = "VAR"
+                elif vartype == FLOAT: t.type = "VARF"
+                elif vartype == STRING: t.type = "VARS"
+                break
         return t
 
     t_TEXT = r"'(\\'|[^'])*'|\"(\\\"|[^\"])*\""

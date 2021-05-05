@@ -2,6 +2,9 @@ import ply.yacc as yacc
 
 from myLexer import Lexer
 
+INT = 0
+FLOAT = 1
+STRING = 2
 class Parser:
 
     tokens = Lexer.tokens
@@ -37,35 +40,66 @@ class Parser:
 
     def p_Attrib(self, p):
         "Attrib : ID '=' Expression ';'"
-        if p[1] not in self.fp:
-            self.fp.append(p[1])
+        if p[1] not in [a for a,_ in self.fp]:
+            self.fp.append((p[1],INT))
         else:
             print(f"Error in line {p.lineno(2)}: variable {p[1]} was previously declared.")
             raise SyntaxError
-        p[0] = f"{p[3]}storeg {self.fp.index(p[1])}\n"
+        p[0] = f"{p[3]}storeg {len(self.fp) - 1}\n"
 
-    def p_Attrib_stdin(self, p):
-        "Attrib : ID '=' INPUT '(' TEXT ')' ';'"
-        if p[1] not in self.fp:
-            self.fp.append(p[1])
+    def p_Attrib_f(self, p):
+        "Attrib : ID '=' ExpressionF ';'"
+        if p[1] not in [a for a,_ in self.fp]:
+            self.fp.append((p[1],FLOAT))
         else:
             print(f"Error in line {p.lineno(2)}: variable {p[1]} was previously declared.")
             raise SyntaxError
-        p[0] = f"pushs {p[5]}\nwrites\nread\natoi\nstoreg {self.fp.index(p[1])}\n"
+        p[0] = f"{p[3]}storeg {len(self.fp) - 1}\n"
+
+    def p_Attrib_s(self, p):
+        "Attrib : ID '=' String ';'"
+        if p[1] not in [a for a,_ in self.fp]:
+            self.fp.append((p[1],STRING))
+        else:
+            print(f"Error in line {p.lineno(2)}: variable {p[1]} was previously declared.")
+            raise SyntaxError
+        p[0] = f"{p[3]}storeg {len(self.fp) - 1}\n"
 
     def p_Attrib_Empty(self, p):
         "Attrib : ID ';'"
-        if p[1] not in self.fp:
+        if p[1] not in [a for a,_ in self.fp]:
             self.fp.append(p[1])
         else:
             print(f"Error in line {p.lineno(2)}: variable {p[1]} was previously declared.")
             raise SyntaxError
         p[0] = f"pushi 0\nstoreg {self.fp.index(p[1])}\n"
 
+    def p_Attrib_Error(self, p):
+        """Attrib : VAR '=' Expression ';'
+                  | VAR '=' ExpressionF ';'
+                  | VAR '=' String ';'
+                  | VARF '=' Expression ';'
+                  | VARF '=' ExpressionF ';'
+                  | VARF '=' String ';'
+                  | VARS '=' Expression ';'
+                  | VARS '=' ExpressionF ';'
+                  | VARS '=' String ';'"""
+        print(f"Error in line {p.lineno(2)}: variable {p[1]} was previously declared.")
+        raise SyntaxError
+
+
     def p_Command_PRINT(self, p):
         """Command : PRINT '(' Expression ')' ';'
                    | PRINT '(' Logical ')' ';'"""
         p[0] = p[3] + "writei\n" + "pushs \"\\n\"\n" + "writes\n"
+
+    def p_Command_PRINT_f(self, p):
+        "Command : PRINT '(' ExpressionF ')' ';'"
+        p[0] = p[3] + "writef\n" + "pushs \"\\n\"\n" + "writes\n"
+
+    def p_Command_PRINT_s(self, p):
+        "Command : PRINT '(' String ')' ';'"
+        p[0] = p[3] + "writes\n" + "pushs \"\\n\"\n" + "writes\n"
 
     def p_Command_if(self, p):
         "Command : IF Logical '{' Commands '}'"
@@ -98,7 +132,7 @@ class Parser:
         ('left','NOT'),
         ('left','<','>','GE','LE','EQ','NE'),
         ('left','+','-'),
-        ('left','*','/'),
+        ('left','*','/','%'),
         ('right','UMINUS'),
         ('left','POW')
     )
@@ -118,6 +152,43 @@ class Parser:
     def p_Expression_divide(self, p):
         "Expression : Expression '/' Expression"
         p[0] =  p[1] + p[3] + "div\n"
+
+    def p_Expression_mod(self, p):
+        "Expression : Expression '%' Expression"
+        p[0] =  p[1] + p[3] + "mod\n"
+
+    def p_ExpressionF_ops1(self, p):
+        """ExpressionF : ExpressionF '+' ExpressionF
+                       | ExpressionF '-' ExpressionF
+                       | ExpressionF '*' ExpressionF
+                       | ExpressionF '/' ExpressionF"""
+        p[0] =  p[1] + p[3]
+        if p[2] == '+': p[0] += "fadd\n"
+        elif p[2] == '-': p[0] += "fsub\n"
+        elif p[2] == '*': p[0] += "fmul\n"
+        elif p[2] == '/': p[0] += "fdiv\n"
+
+    def p_ExpressionF_ops2(self, p):
+        """ExpressionF : Expression '+' ExpressionF
+                       | Expression '-' ExpressionF
+                       | Expression '*' ExpressionF
+                       | Expression '/' ExpressionF"""
+        p[0] =  p[1] + "itof\n" + p[3]
+        if p[2] == '+': p[0] += "fadd\n"
+        elif p[2] == '-': p[0] += "fsub\n"
+        elif p[2] == '*': p[0] += "fmul\n"
+        elif p[2] == '/': p[0] += "fdiv\n"
+
+    def p_ExpressionF_ops3(self, p):
+        """ExpressionF : ExpressionF '+' Expression
+                       | ExpressionF '-' Expression
+                       | ExpressionF '*' Expression
+                       | ExpressionF '/' Expression"""
+        p[0] =  p[1] + p[3] + "itof\n"
+        if p[2] == '+': p[0] += "fadd\n"
+        elif p[2] == '-': p[0] += "fsub\n"
+        elif p[2] == '*': p[0] += "fmul\n"
+        elif p[2] == '/': p[0] += "fdiv\n"
 
     # def p_Expression_pow(self, p):
     #     "Expression : Expression POW Expression"
@@ -139,21 +210,41 @@ class Parser:
         "Expression : Value"
         p[0] = p[1]
 
+    def p_ExpressionF_ValueF(self, p):
+        "ExpressionF : ValueF"
+        p[0] = p[1]
+
+    def p_ValueF_FLOAT(self, p):
+        "ValueF : FLOAT"
+        p[0] = f"pushf {p[1]}\n"
+
+    def p_ValueF_IDF(self, p):
+        "ValueF : VARF"
+        p[0] = f"pushg {self.fp.index((p[1],FLOAT))}\n"
+
+    def p_ValueF_str(self, p):
+        "ValueF : FLOATKW '(' String ')'"
+        p[0] = f"{p[3]}atof\n"
+
     def p_Value_ID(self, p):
-        "Value : ID"
-        p[0] = f"pushg {self.fp.index(p[1])}\n"
+        "Value : VAR"
+        p[0] = f"pushg {self.fp.index((p[1],INT))}\n"
 
     def p_Value_INT(self, p):
         "Value : INT"
         p[0] = f"pushi {p[1]}\n"
 
+    def p_Value_str(self, p):
+        "Value : INTKW '(' String ')'"
+        p[0] = f"{p[3]}atoi\n"
+
     def p_Logical_Comparisons(self, p):
-        """Logical : Value '>' Value
-                   | Value '<' Value
-                   | Value GE Value
-                   | Value LE Value
-                   | Value EQ Value
-                   | Value NE Value"""
+        """Logical : Expression '>' Expression
+                   | Expression '<' Expression
+                   | Expression GE Expression
+                   | Expression LE Expression
+                   | Expression EQ Expression
+                   | Expression NE Expression"""
         if p[2] == '>':
             p[0] = p[1] + p[3] + "sup\n"
         elif p[2] == '<':
@@ -183,14 +274,26 @@ class Parser:
         "Logical : NOT Logical"
         p[0] = p[2] + "not\n"
 
+    def p_String(self, p):
+        "String : TEXT"
+        p[0] = "pushs "+ p[1].replace("'",'"') + "\n"
+
+    def p_String_var(self, p):
+        "String : VARS"
+        p[0] = f"pushg {self.fp.index((p[1],STRING))}\n"
+
+    def p_String_input(self, p):
+        "String : INPUT '(' String ')'"
+        p[0] = f"{p[3]}writes\nread\n"
+
     # def p_error(self, p):
     #     print("Syntax error in input!")
 
 
     def build(self, **kwargs):
-        self.lexer = Lexer()
+        self.fp = list()
+        self.lexer = Lexer(self.fp)
         self.lexer.build()
         self.parser = yacc.yacc(module=self, **kwargs)
-        self.fp = list()
         self.labels_if = 0
         self.labels_if_else = 0
