@@ -1,0 +1,41 @@
+	pushi 0
+	pushi 0
+	pushi 0
+start
+	pushi 1
+	storeg 2
+	pushs "enter a number to calculate it's factorial\n"
+	writes // pega no endereço no topo da stack e imprime a string correspondente
+	read   // lê de stdin
+	atoi   // converte a string lida para um int
+	storeg 1 // armazena o int na stack gp
+	pushi 1  // empilha 1
+	storeg 0 // armazena o valor 1 na stack gp
+inif1: nop
+	pushg 0  // pega no valor da stack gp em 0 (neste caso é o número de iterações)
+	pushg 1 // pega no valor da stack gp em 1 (neste caso é o inteiro lido)
+	infeq // verifica se o valor lido é maior que 1
+	jz endf1 // se não for, salta para o fim
+	jump instrf1 // se for, salta para instrf1
+ultinstrf1: nop
+	pushg 0
+	pushi 1
+	add
+	storeg 0
+	jump inif1
+instrf1: nop
+	pushg 2
+	pushg 0
+	mul
+	storeg 2
+	jump ultinstrf1
+endf1: nop
+	pushs "factorial of "
+	writes  //escrever
+	pushg 1
+	writei  //escrever
+	pushs " = "
+	writes   //escrever
+	pushg 2
+	writei  //escrever
+stop
