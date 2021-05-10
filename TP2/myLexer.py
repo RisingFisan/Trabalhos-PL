@@ -6,19 +6,22 @@ STRING = 2
 
 class Lexer:
 
-    def __init__(self, fp : list):
+    def __init__(self, fp : dict):
         self.fp = fp
 
     reserved = {
         'int': 'INTKW',
         'float': 'FLOATKW',
+        'str': 'STRKW',
         'print': "PRINT",
         'or': 'OR',
         'and': 'AND',
         'not': 'NOT',
         'if': 'IF',
         'else': 'ELSE',
-        'input': 'INPUT'
+        'input': 'INPUT',
+        'for': 'FOR',
+        'while': 'WHILE'
     }
 
     tokens = [
@@ -33,7 +36,8 @@ class Lexer:
         'LE',
         'EQ',
         'NE',
-        'TEXT'
+        'TEXT',
+        'PP'
     ] + list(reserved.values())
 
     literals = ['=','+','-','*','/','(',')','<','>',',',';','%','{','}']
@@ -56,16 +60,16 @@ class Lexer:
     t_AND = r'&&'
     t_OR = r'\|\|'
     t_NOT = r'!'
+    t_PP = r'\+\+'
         
     def t_ID(self, t):
         r'[a-zA-Z_][a-zA-Z0-9_\']*'
         t.type = Lexer.reserved.get(t.value,"ID")
-        for var,vartype in self.fp:
-            if var == t.value:
-                if vartype == INT: t.type = "VAR"
-                elif vartype == FLOAT: t.type = "VARF"
-                elif vartype == STRING: t.type = "VARS"
-                break
+        _, vartype = self.fp.get(t.value, (None,None))
+        if vartype is not None:
+            if vartype == INT: t.type = "VAR"
+            elif vartype == FLOAT: t.type = "VARF"
+            elif vartype == STRING: t.type = "VARS"
         return t
 
     t_TEXT = r"'(\\'|[^'])*'|\"(\\\"|[^\"])*\""
