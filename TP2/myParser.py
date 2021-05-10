@@ -139,14 +139,27 @@ class Parser:
     def p_Command_PRINT(self, p):
         """Command : PRINT '(' Expression ')' ';'
                    | PRINT '(' Logical ')' ';'"""
-        p[0] = p[3] + "writei\n" + "pushs \"\\n\"\n" + "writes\n"
+        p[0] = p[3] + "writei\n"
 
     def p_Command_PRINT_f(self, p):
         "Command : PRINT '(' ExpressionF ')' ';'"
-        p[0] = p[3] + "writef\n" + "pushs \"\\n\"\n" + "writes\n"
+        p[0] = p[3] + "writef\n"
 
     def p_Command_PRINT_s(self, p):
         "Command : PRINT '(' String ')' ';'"
+        p[0] = p[3] + "writes\n"
+
+    def p_Command_PRINTLN(self, p):
+        """Command : PRINTLN '(' Expression ')' ';'
+                   | PRINTLN '(' Logical ')' ';'"""
+        p[0] = p[3] + "writei\n" + "pushs \"\\n\"\n" + "writes\n"
+
+    def p_Command_PRINTLN_f(self, p):
+        "Command : PRINTLN '(' ExpressionF ')' ';'"
+        p[0] = p[3] + "writef\n" + "pushs \"\\n\"\n" + "writes\n"
+
+    def p_Command_PRINTLN_s(self, p):
+        "Command : PRINTLN '(' String ')' ';'"
         p[0] = p[3] + "writes\n" + "pushs \"\\n\"\n" + "writes\n"
 
     def p_Command_if(self, p):
@@ -293,6 +306,10 @@ class Parser:
         "ValueF : FLOATKW '(' String ')'"
         p[0] = f"{p[3]}atof\n"
 
+    def p_ValueF_int(self, p):
+        "ValueF : FLOATKW '(' Expression ')'"
+        p[0] = f"{p[3]}itof\n"
+
     def p_Value_ID(self, p):
         "Value : VAR"
         p[0] = f"pushg {self.fp[p[1]][0]}\n"
@@ -304,6 +321,10 @@ class Parser:
     def p_Value_str(self, p):
         "Value : INTKW '(' String ')'"
         p[0] = f"{p[3]}atoi\n"
+
+    def p_Value_float(self, p):
+        "Value : INTKW '(' ExpressionF ')'"
+        p[0] = f"{p[3]}ftoi\n"
 
     def p_Logical_Comparisons(self, p):
         """Logical : Expression '>' Expression
@@ -324,6 +345,69 @@ class Parser:
             p[0] = p[1] + p[3] + "equal\n"
         elif p[2] == '!=':
             p[0] = p[1] + p[3] + "equal\nnot\n"
+
+    def p_Logical_Comparisons_f(self, p):
+        """Logical : ExpressionF '>' ExpressionF
+                   | ExpressionF '<' ExpressionF
+                   | ExpressionF GE ExpressionF
+                   | ExpressionF LE ExpressionF
+                   | ExpressionF EQ ExpressionF
+                   | ExpressionF NE ExpressionF"""
+        if p[2] == '>':
+            p[0] = p[1] + p[3] + "fsup\nftoi\n"
+        elif p[2] == '<':
+            p[0] = p[1] + p[3] + "finf\nftoi\n"
+        elif p[2] == '>=':
+            p[0] = p[1] + p[3] + "fsupeq\nftoi\n"
+        elif p[2] == '<=':
+            p[0] = p[1] + p[3] + "finfeq\nftoi\n"
+        elif p[2] == '==':
+            p[0] = p[1] + p[3] + "equal\n"
+        elif p[2] == '!=':
+            p[0] = p[1] + p[3] + "equal\nnot\n"
+
+    def p_Logical_Comparisons_f2(self, p):
+        """Logical : ExpressionF '>' Expression
+                   | ExpressionF '<' Expression
+                   | ExpressionF GE Expression
+                   | ExpressionF LE Expression
+                   | ExpressionF EQ Expression
+                   | ExpressionF NE Expression"""
+        p[0] = p[1] + p[3] + "itof\n"
+        if p[2] == '>':
+            p[0] += "fsup\nftoi\n"
+        elif p[2] == '<':
+            p[0] += "finf\nftoi\n"
+        elif p[2] == '>=':
+            p[0] += "fsupeq\nftoi\n"
+        elif p[2] == '<=':
+            p[0] += "finfeq\nftoi\n"
+        elif p[2] == '==':
+            p[0] += p[1] + p[3] + "equal\n"
+        elif p[2] == '!=':
+            p[0] += "equal\nnot\n"
+
+    def p_Logical_Comparisons_f3(self, p):
+        """Logical : Expression '>' ExpressionF
+                   | Expression '<' ExpressionF
+                   | Expression GE ExpressionF
+                   | Expression LE ExpressionF
+                   | Expression EQ ExpressionF
+                   | Expression NE ExpressionF"""
+        p[0] = p[1] + "itof\n" + p[3]
+        if p[2] == '>':
+            p[0] += "fsup\nftoi\n"
+        elif p[2] == '<':
+            p[0] += "finf\nftoi\n"
+        elif p[2] == '>=':
+            p[0] += "fsupeq\nftoi\n"
+        elif p[2] == '<=':
+            p[0] += "finfeq\nftoi\n"
+        elif p[2] == '==':
+            p[0] += p[1] + p[3] + "equal\n"
+        elif p[2] == '!=':
+            p[0] += "equal\nnot\n"
+
 
     def p_Logical_Parens(self, p):
         "Logical : '(' Logical ')'"

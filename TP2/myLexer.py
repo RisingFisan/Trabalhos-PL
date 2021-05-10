@@ -14,6 +14,7 @@ class Lexer:
         'float': 'FLOATKW',
         'str': 'STRKW',
         'print': "PRINT",
+        'println': "PRINTLN",
         'or': 'OR',
         'and': 'AND',
         'not': 'NOT',
