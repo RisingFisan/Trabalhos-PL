@@ -1,0 +1,12 @@
+int N = 5;
+int i, v, prod = 1;
+print("Introduza ");
+print(N);
+println(" valores, um por linha: ");
+while i < N {
+    v = int(input());
+    prod = prod * v;
+    i++;
+}
+print("O produtório destes valores é ");
+println(prod);

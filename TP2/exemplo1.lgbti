@@ -1,0 +1,12 @@
+int n1 = 0, n2 = 0, n3 = 0, n4 = 0;
+n1 = int(input("Introduza o valor do 1º lado: "));
+n2 = int(input("Introduza o valor do 2º lado: "));
+n3 = int(input("Introduza o valor do 3º lado: "));
+n4 = int(input("Introduza o valor do 4º lado: "));
+
+if n1 == n2 and n2 == n3 and n3 == n4 {
+    println("Estes lados formam um quadrado.");
+}
+else {
+    println("Estes lados não podem formar um quadrado.");
+}

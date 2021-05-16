@@ -1,0 +1,16 @@
+int n = int(input("Quantos valores pretende ler? "));
+int i, v, smallest;
+if n < 1 { println ("Error - 'n' must be a natural number!"); }
+else {
+    for(i = 0; i < n; i++) {
+        print("Valor ");
+        print(i);
+        v = int(input(": "));
+        if i == 1 { smallest = v; }
+        else if v < smallest { 
+            smallest = v;
+        }     
+    }
+    print("O menor valor lido é ");
+    println(smallest);
+}

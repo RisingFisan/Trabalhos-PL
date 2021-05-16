@@ -5,13 +5,14 @@ from myLexer import Lexer
 INT = 0
 FLOAT = 1
 STRING = 2
+ARRAY = 3
 class Parser:
 
     tokens = Lexer.tokens
 
     def p_Program(self, p):
         "Program : Attribs Commands"
-        p[0] = (f"pushn {len(self.fp)}\n" if len(self.fp) > 0 else "") + "start\n" + p[1] + p[2] + "stop\n"
+        p[0] = p[1] + "start\n" + p[2] + "stop\n"
 
     def p_Program_noAttribs(self, p):
         "Program : Commands"
@@ -39,54 +40,115 @@ class Parser:
         p[0] = p[1]
 
     def p_Attrib(self, p):
-        "Attrib : INTKW ID '=' Expression ';'"
-        i = len(self.fp)
+        "Attrib : INTKW AttribsInt ';'"
+        p[0] = p[2]
+
+    def p_Attrib_Array(self, p):
+        "Attrib : INTKW ID '[' INT ']' ';'"
         if p[2] not in self.fp:
-            self.fp[p[2]] = (i,INT)
+            self.fp[p[2]] = (self.stack_size,ARRAY)
+            self.stack_size += p[4]
         else:
             print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
             raise SyntaxError
-        p[0] = f"{p[4]}storeg {i}\n"
+        p[0] = f"pushn {p[4]}\n"
+
+    def p_Array(self, p):
+        "Array : '[' Elems ']' "
+        p[0] = p[2]
+
+    def p_Elems(self, p):
+        "Elems : Elems ',' INT"
+        p[0] = p[1]
+        p[0].append(p[3])
+
+    def p_Elems_single(self, p):
+        "Elems : INT"
+        p[0] = [p[1]]
+
+    def p_Attrib_Array_elems(self, p):
+        "Attrib : INTKW ID '[' INT ']' '=' Array ';'"
+        if p[2] not in self.fp:
+            self.fp[p[2]] = (self.stack_size,ARRAY)
+            self.stack_size += p[4]
+        else:
+            print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
+            raise SyntaxError
+
+        if len(p[7]) != p[4]:
+            print(f"Error in line {p.lineno(2)}: number of array elements different from the defined value.")
+            raise SyntaxError
+        p[0] = ""
+        for elem in p[7]:
+            p[0] += f"pushi {elem}\n"
+
+
+    def p_AttribsInt(self, p):
+        "AttribsInt : AttribsInt ',' AttribInt"
+        p[0] = p[1] + p[3]
+
+    def p_AttribsInt_single(self, p):
+        "AttribsInt : AttribInt"
+        p[0] = p[1]
+
+    def p_AttribInt(self, p):
+        """AttribInt : ID '=' Expression
+                     | ID"""
+        i = self.stack_size
+        if p[1] not in self.fp:
+            self.fp[p[1]] = (i,INT)
+            self.stack_size += 1
+        else:
+            print(f"Error in line {p.lineno(1)}: variable {p[1]} was previously declared.")
+            raise SyntaxError
+        p[0] = p[3] if len(p) > 2 else 'pushi 0\n'
 
     def p_Attrib_f(self, p):
-        "Attrib : FLOATKW ID '=' ExpressionF ';'"
-        i = len(self.fp)
-        if p[2] not in self.fp:
-            self.fp[p[2]] = (i,FLOAT)
+        "Attrib : FLOATKW AttribsFloat ';'"
+        p[0] = p[2]
+
+    def p_AttribsFloat(self, p):
+        "AttribsFloat : AttribsFloat ',' AttribFloat"
+        p[0] = p[1] + p[3]
+
+    def p_AttribsFloat_single(self, p):
+        "AttribsFloat : AttribFloat"
+        p[0] = p[1]
+
+    def p_AttribFloat(self, p):
+        """AttribFloat : ID '=' ExpressionF
+                       | ID"""
+        i = self.stack_size
+        if p[1] not in self.fp:
+            self.fp[p[1]] = (i,FLOAT)
+            self.stack_size += 1
         else:
-            print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
+            print(f"Error in line {p.lineno(1)}: variable {p[1]} was previously declared.")
             raise SyntaxError
-        p[0] = f"{p[4]}storeg {i}\n"
+        p[0] = p[3] if len(p) > 2 else 'pushf 0.0\n'
 
     def p_Attrib_s(self, p):
-        "Attrib : STRKW ID '=' String ';'"
-        i = len(self.fp)
-        if p[2] not in self.fp:
-            self.fp[p[2]] = (i,STRING)
-        else:
-            print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
-            raise SyntaxError
-        p[0] = f"{p[4]}storeg {i}\n"
+        "Attrib : STRKW AttribsString ';'"
+        p[0] = p[2]
 
-    def p_Attrib_Empty(self, p):
-        "Attrib : INTKW ID ';'"
-        i = len(self.fp)
-        if p[2] not in self.fp:
-            self.fp[p[2]] = (i,INT)
-        else:
-            print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
-            raise SyntaxError
-        p[0] = f"pushi 0\nstoreg {i}\n"
+    def p_AttribsString(self, p):
+        "AttribsString : AttribsString ',' AttribString"
+        p[0] = p[1] + p[3]
 
-    def p_Attrib_Empty_f(self, p):
-        "Attrib : FLOATKW ID ';'"
-        i = len(self.fp)
-        if p[2] not in self.fp:
-            self.fp[p[2]] = (i,FLOAT)
+    def p_AttribsString_single(self, p):
+        "AttribsString : AttribString"
+        p[0] = p[1]
+
+    def p_AttribString(self, p):
+        "AttribString : ID '=' String ';'"
+        i = self.stack_size
+        if p[1] not in self.fp:
+            self.fp[p[1]] = (i,STRING)
+            self.stack_size += 1
         else:
-            print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
+            print(f"Error in line {p.lineno(1)}: variable {p[1]} was previously declared.")
             raise SyntaxError
-        p[0] = f"pushf 0.0\nstoreg {i}\n"
+        p[0] = p[3]
 
     def p_Attrib_Error(self, p):
         """Attrib : INTKW VAR '=' Expression ';'
@@ -109,15 +171,25 @@ class Parser:
         "Redefine : VAR '=' Expression"
         p[0] = f"{p[3]}storeg {self.fp[p[1]][0]}\n"
 
-    def p_Redefine_pp(self, p):
-        "Redefine : VAR PP"
+    def p_Redefine_ppmm(self, p):
+        """Redefine : VAR PP
+                    | VAR MM"""
         i = self.fp[p[1]][0]
-        p[0] = f"pushg {i}\npushi 1\nadd\nstoreg {i}\n"
+        p[0] = f"pushg {i}\npushi 1\n{'add' if p[2] == '++' else 'sub'}\nstoreg {i}\n"
+
+    def p_Redefine_ArrayElem(self, p):
+        "Redefine : VARA '[' Expression ']' '=' Expression"
+        p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}{p[6]}storen\n"
+
+    def p_Redefine_ArrayElem_f(self, p):
+        "Redefine : VARA '[' Expression ']' '=' ExpressionF"
+        p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}{p[6]}ftoi\nstoren\n"
 
     def p_Redefine_pp_f(self, p):
-        "Redefine : VARF PP"
+        """Redefine : VARF PP
+                    | VARF MM"""
         i = self.fp[p[1]][0]
-        p[0] = f"pushg {i}\npushf 1\nfadd\nstoreg {i}\n"
+        p[0] = f"pushg {i}\npushf 1.0\n{'fadd' if p[2] == '++' else 'fsub'}\nstoreg {i}\n"
 
     def p_Redefine_f(self, p):
         "Redefine : VARF '=' ExpressionF"
@@ -179,7 +251,7 @@ class Parser:
 
     def p_Else_if(self, p):
         "Else : ELSE IF Boolean '{' Commands '}'"
-        p[0] = p[4] + f"jz l{self.labels_if}\n" + p[5] + f"l{self.labels_if}:\n" + f"le{self.labels_if_else}:\n"
+        p[0] = p[3] + f"jz l{self.labels_if}\n" + p[5] + f"l{self.labels_if}:\n" + f"le{self.labels_if_else}:\n"
         self.labels_if += 1
 
     def p_Else_if_else(self, p):
@@ -318,6 +390,10 @@ class Parser:
         "Value : INT"
         p[0] = f"pushi {p[1]}\n"
 
+    def p_Value_ArrayElem(self, p):
+        "Value : VARA '[' Expression ']'"
+        p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}loadn\n"
+
     def p_Value_str(self, p):
         "Value : INTKW '(' String ')'"
         p[0] = f"{p[3]}atoi\n"
@@ -432,7 +508,7 @@ class Parser:
 
     def p_String(self, p):
         "String : TEXT"
-        p[0] = "pushs "+ p[1].replace("'",'"') + "\n"
+        p[0] = "pushs " + '"' + p[1].strip('"') + '"' + "\n"
 
     def p_String_var(self, p):
         "String : VARS"
@@ -442,16 +518,21 @@ class Parser:
         "String : INPUT '(' String ')'"
         p[0] = f"{p[3]}writes\nread\n"
 
+    def p_String_input_empty(self, p):
+        "String : INPUT '(' ')'"
+        p[0] = f"read\n"
+
     def p_Empty(self, p):
         "Empty : "
         pass
 
-    # def p_error(self, p):
-    #     print("Syntax error in input!")
+    def p_error(self, p):
+        print(f"Syntax error - unexpected token '{p.value}' on line {p.lineno}.")
 
 
     def build(self, **kwargs):
         self.fp = dict()
+        self.stack_size = 0
         self.lexer = Lexer(self.fp)
         self.lexer.build()
         self.parser = yacc.yacc(module=self, **kwargs)

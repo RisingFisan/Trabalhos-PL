@@ -3,6 +3,7 @@ import ply.lex as lex
 INT = 0
 FLOAT = 1
 STRING = 2
+ARRAY = 3
 
 class Lexer:
 
@@ -32,16 +33,18 @@ class Lexer:
         'VAR',
         'VARF',
         'VARS',
+        'VARA',
         'POW',
         'GE',
         'LE',
         'EQ',
         'NE',
         'TEXT',
-        'PP'
+        'PP',
+        'MM'
     ] + list(reserved.values())
 
-    literals = ['=','+','-','*','/','(',')','<','>',',',';','%','{','}']
+    literals = ['=','+','-','*','/','(',')','<','>',',',';','%','{','}','[',']']
 
     def t_FLOAT(self, t):
         r'(\d*)?\.\d+(e(?:\+|-)\d+)?'
@@ -62,6 +65,7 @@ class Lexer:
     t_OR = r'\|\|'
     t_NOT = r'!'
     t_PP = r'\+\+'
+    t_MM = r'\-\-'
         
     def t_ID(self, t):
         r'[a-zA-Z_][a-zA-Z0-9_\']*'
@@ -71,6 +75,7 @@ class Lexer:
             if vartype == INT: t.type = "VAR"
             elif vartype == FLOAT: t.type = "VARF"
             elif vartype == STRING: t.type = "VARS"
+            elif vartype == ARRAY: t.type = "VARA"
         return t
 
     t_TEXT = r"'(\\'|[^'])*'|\"(\\\"|[^\"])*\""
@@ -80,6 +85,10 @@ class Lexer:
     def t_newline(self, t):
         r'\n'
         t.lexer.lineno += 1
+
+    def t_error(self, t):
+        print(f"Illegal character '{t.value[0]}'")
+        t.lexer.skip(1)
 
     def build(self, **kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
