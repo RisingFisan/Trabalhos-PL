@@ -1,0 +1,138 @@
+pushi 3
+pushi 1
+pushi 2
+pushi 3
+pushi 4
+pushi 5
+pushi 6
+pushi 7
+pushi 8
+pushi 9
+pushi 9
+pushi 8
+pushi 7
+pushi 6
+pushi 5
+pushi 4
+pushi 3
+pushi 2
+pushi 1
+pushn 9
+pushi 0
+pushi 0
+start
+pushi 0
+storeg 28
+lc1:
+pushg 28
+pushg 0
+inf
+jz lb1
+pushi 0
+storeg 29
+lc0:
+pushg 29
+pushg 0
+inf
+jz lb0
+pushgp
+pushi 19
+padd
+pushg 28
+pushi 3
+mul
+pushg 29
+add
+pushgp
+pushi 1
+padd
+pushg 28
+pushi 3
+mul
+pushg 29
+add
+loadn
+pushgp
+pushi 10
+padd
+pushg 28
+pushi 3
+mul
+pushg 29
+add
+loadn
+add
+storen
+pushg 29
+pushi 1
+add
+storeg 29
+jump lc0
+lb0:
+pushg 28
+pushi 1
+add
+storeg 28
+jump lc1
+lb1:
+pushs "["
+writes
+pushs "\n"
+writes
+pushi 0
+storeg 28
+lc3:
+pushg 28
+pushg 0
+inf
+jz lb3
+pushs "["
+writes
+pushi 0
+storeg 29
+lc2:
+pushg 29
+pushg 0
+inf
+jz lb2
+pushgp
+pushi 19
+padd
+pushg 28
+pushi 3
+mul
+pushg 29
+add
+loadn
+writei
+pushg 29
+pushg 0
+pushi 1
+sub
+equal
+not
+jz l0
+pushs ","
+writes
+l0:
+pushg 29
+pushi 1
+add
+storeg 29
+jump lc2
+lb2:
+pushs "]"
+writes
+pushs "\n"
+writes
+pushg 28
+pushi 1
+add
+storeg 28
+jump lc3
+lb3:
+pushs "]"
+writes
+pushs "\n"
+writes
+stop

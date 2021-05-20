@@ -1,0 +1,64 @@
+pushs "Quantos valores pretende ler? "
+writes
+read
+atoi
+pushi 0
+pushi 0
+pushi 0
+start
+pushg 0
+pushi 1
+inf
+jz l2
+pushs "Error - 'n' must be a natural number!"
+writes
+pushs "\n"
+writes
+jump le1
+l2:
+pushi 0
+storeg 1
+lc0:
+pushg 1
+pushg 0
+inf
+jz lb0
+pushs "Valor "
+writes
+pushg 1
+writei
+pushs ": "
+writes
+read
+atoi
+storeg 2
+pushg 1
+pushi 1
+equal
+jz l1
+pushg 2
+storeg 3
+jump le0
+l1:
+pushg 2
+pushg 3
+inf
+jz l0
+pushg 2
+storeg 3
+l0:
+le0:
+pushg 1
+pushi 1
+add
+storeg 1
+jump lc0
+lb0:
+pushs "O menor valor lido é "
+writes
+pushg 3
+writei
+pushs "\n"
+writes
+le1:
+stop

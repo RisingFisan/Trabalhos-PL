@@ -1,0 +1,38 @@
+pushi 5 // 0
+pushi 0 // 1
+pushi 0 // 2
+pushi 1 // 3
+start
+pushs "Introduza "
+writes
+pushg 0
+writei
+pushs " valores, um por linha: "
+writes
+pushs "\n"
+writes
+lc0:
+pushg 1
+pushg 0
+inf
+jz lb0
+read
+atoi
+storeg 2
+pushg 3
+pushg 2
+mul
+storeg 3
+pushg 1
+pushi 1
+add
+storeg 1
+jump lc0
+lb0:
+pushs "O produtório destes valores é "
+writes
+pushg 3
+writei
+pushs "\n"
+writes
+stop

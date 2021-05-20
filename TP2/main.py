@@ -28,5 +28,6 @@ Se não for fornecido um ficheiro de input, o programa irá correr em modo "inte
 else:
     with open(sys.argv[1],"r") as f:
         result = parser.parser.parse(f.read())
-    with open(sys.argv[1].strip(".\\").split('.')[0] + '.vm', "w", newline='\n') as r:
-        r.write(result)
+    if result:
+        with open(sys.argv[1].strip(".\\").split('.')[0] + '.vm', "w", newline='\n') as r:
+            r.write(result)

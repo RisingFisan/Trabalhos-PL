@@ -1,0 +1,56 @@
+pushi 5
+pushn 5
+pushi 0
+start
+pushi 0
+storeg 6
+lc0:
+pushg 6
+pushg 0
+inf
+jz lb0
+pushgp
+pushi 1
+padd
+pushg 6
+pushs "Introduza um valor: "
+writes
+read
+atoi
+storen
+pushg 6
+pushi 1
+add
+storeg 6
+jump lc0
+lb0:
+pushg 0
+pushi 1
+sub
+storeg 6
+lc1:
+pushg 6
+pushi 0
+supeq
+jz lb1
+pushgp
+pushi 1
+padd
+pushg 6
+loadn
+writei
+pushg 6
+pushi 0
+equal
+not
+jz l0
+pushs ","
+writes
+l0:
+pushg 6
+pushi 1
+sub
+storeg 6
+jump lc1
+lb1:
+stop

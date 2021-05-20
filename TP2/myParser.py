@@ -23,6 +23,11 @@ class Parser:
         print("Error: no instructions found.")
         raise SyntaxError
 
+    def p_Program_error(self, p):
+        "Program : error"
+        print("Aborting...")
+        exit(1)
+
     def p_Attribs(self, p):
         "Attribs : Attribs Attrib"
         p[0] = p[1] + p[2]
@@ -46,16 +51,42 @@ class Parser:
     def p_Attrib_Array(self, p):
         "Attrib : INTKW ID '[' INT ']' ';'"
         if p[2] not in self.fp:
-            self.fp[p[2]] = (self.stack_size,ARRAY)
+            self.fp[p[2]] = (self.stack_size,ARRAY,p[4])
             self.stack_size += p[4]
         else:
             print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
             raise SyntaxError
         p[0] = f"pushn {p[4]}\n"
 
+    def p_Attrib_Array_2d(self, p):
+        "Attrib : INTKW ID '[' INT ']' '[' INT ']' ';'"
+        if p[2] not in self.fp:
+            self.fp[p[2]] = (self.stack_size,ARRAY,(p[4],p[7]))
+            self.stack_size += p[4] * p[7]
+        else:
+            print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
+            raise SyntaxError
+        p[0] = f"pushn {p[4]*p[7]}\n"
+
     def p_Array(self, p):
         "Array : '[' Elems ']' "
         p[0] = p[2]
+
+    def p_Array_2d(self, p):
+        "Array2d : '[' Arrays ']'"
+        p[0] = p[2]
+
+    def p_Arrays(self, p):
+        "Arrays : Arrays ',' Array "
+        if len(p[3]) != len(p[1][0]):
+            print(f"Error in line {p.lineno(2)}: two dimensional array must have rows of equal length.")
+            raise SyntaxError
+        p[0] = p[1]
+        p[0].append(p[3])
+
+    def p_Arrays_single(self, p):
+        "Arrays : Array"
+        p[0] = [p[1]]
 
     def p_Elems(self, p):
         "Elems : Elems ',' INT"
@@ -68,8 +99,10 @@ class Parser:
 
     def p_Attrib_Array_elems(self, p):
         "Attrib : INTKW ID '[' INT ']' '=' Array ';'"
+        "Attrib : INTKW ID '[' Empty ']' '=' Array ';'"
+        if not p[4]: p[4] = len(p[7])
         if p[2] not in self.fp:
-            self.fp[p[2]] = (self.stack_size,ARRAY)
+            self.fp[p[2]] = (self.stack_size,ARRAY,p[4])
             self.stack_size += p[4]
         else:
             print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
@@ -81,6 +114,34 @@ class Parser:
         p[0] = ""
         for elem in p[7]:
             p[0] += f"pushi {elem}\n"
+
+    def p_Attrib_Array_2d_elems(self, p):
+        """Attrib : INTKW ID '[' INT ']' '[' INT ']' '=' Array2d ';'
+                  | INTKW ID '[' INT ']' '[' Empty ']' '=' Array2d ';'
+                  | INTKW ID '[' Empty ']' '[' INT ']' '=' Array2d ';'
+                  | INTKW ID '[' Empty ']' '[' Empty ']' '=' Array2d ';'"""
+
+        if not p[4]: p[4] = len(p[10])
+        if not p[7]: p[7] = len(p[10][0])
+
+        if len(p[10]) != p[4]:
+            print(f"Error in line {p.lineno(2)}: mismatch between expected number of rows and actual number of rows found.")
+            raise SyntaxError
+        if len(p[10][0]) != p[7]:
+            print(f"Error in line {p.lineno(2)}: mismatch between expected number of columns and actual number of columns found.")
+            raise SyntaxError
+
+        if p[2] not in self.fp:
+            self.fp[p[2]] = (self.stack_size,ARRAY,(p[4],p[7]))
+            self.stack_size += p[4] * p[7]
+        else:
+            print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
+            raise SyntaxError
+
+        p[0] = ""
+        for row in p[10]:
+            for elem in row:
+                p[0] += f"pushi {elem}\n"
 
 
     def p_AttribsInt(self, p):
@@ -151,17 +212,10 @@ class Parser:
         p[0] = p[3]
 
     def p_Attrib_Error(self, p):
-        """Attrib : INTKW VAR '=' Expression ';'
-                  | FLOATKW VAR '=' ExpressionF ';'
-                  | STRKW VAR '=' String ';'
-                  | INTKW VARF '=' Expression ';'
-                  | FLOATKW VARF '=' ExpressionF ';'
-                  | STRKW VARF '=' String ';'
-                  | INTKW VARS '=' Expression ';'
-                  | FLOATKW VARS '=' ExpressionF ';'
-                  | STRKW VARS '=' String ';'"""
-        print(f"Error in line {p.lineno(2)}: variable {p[2]} was previously declared.")
-        raise SyntaxError
+        """Attrib : INTKW error ';'
+                  | FLOATKW error ';'
+                  | STRKW error ';'"""
+        p[0] = ""
 
     def p_Command_Redefine(self, p):
         "Command : Redefine ';'"
@@ -184,6 +238,14 @@ class Parser:
     def p_Redefine_ArrayElem_f(self, p):
         "Redefine : VARA '[' Expression ']' '=' ExpressionF"
         p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}{p[6]}ftoi\nstoren\n"
+
+    def p_Redefine_Array2dElem(self, p):
+        "Redefine : VARA '[' Expression ']' '[' Expression ']' '=' Expression"
+        p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}pushi {self.fp[p[1]][2][1]}\nmul\n{p[6]}add\n{p[9]}storen\n"
+
+    def p_Redefine_Array2dElem_f(self, p):
+        "Redefine : VARA '[' Expression ']' '[' Expression ']' '=' ExpressionF"
+        p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}pushi {self.fp[p[1]][2][1]}\nmul\n{p[6]}add\n{p[9]}ftoi\nstoren\n"
 
     def p_Redefine_pp_f(self, p):
         """Redefine : VARF PP
@@ -393,6 +455,10 @@ class Parser:
     def p_Value_ArrayElem(self, p):
         "Value : VARA '[' Expression ']'"
         p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}loadn\n"
+
+    def p_Value_Array2dElem(self, p):
+        "Value : VARA '[' Expression ']' '[' Expression ']'"
+        p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}pushi {self.fp[p[1]][2][1]}\nmul\n{p[6]}add\nloadn\n"
 
     def p_Value_str(self, p):
         "Value : INTKW '(' String ')'"

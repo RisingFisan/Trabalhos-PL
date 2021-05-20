@@ -70,8 +70,9 @@ class Lexer:
     def t_ID(self, t):
         r'[a-zA-Z_][a-zA-Z0-9_\']*'
         t.type = Lexer.reserved.get(t.value,"ID")
-        _, vartype = self.fp.get(t.value, (None,None))
-        if vartype is not None:
+        v = self.fp.get(t.value, None)
+        if v is not None:
+            vartype = v[1]
             if vartype == INT: t.type = "VAR"
             elif vartype == FLOAT: t.type = "VARF"
             elif vartype == STRING: t.type = "VARS"

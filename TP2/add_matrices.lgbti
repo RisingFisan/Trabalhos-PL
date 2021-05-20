@@ -1,0 +1,22 @@
+int N = 3;
+int a[][] = [[1,2,3],[4,5,6],[7,8,9]];
+int b[][] = [[9,8,7],[6,5,4],[3,2,1]];
+int c[3][3];
+int i, j;
+
+for(i = 0; i < N; i++) {
+    for(j = 0; j < N; j++) {
+        c[i][j] = a[i][j] + b[i][j];
+    }
+}
+
+println("[");
+for(i = 0; i < N; i++) {
+    print("[");
+    for(j = 0; j < N; j++) {
+        print(c[i][j]);
+        if j != N - 1 { print(","); }
+    }
+    println("]");
+}
+println("]");

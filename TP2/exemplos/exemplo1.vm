@@ -1,0 +1,54 @@
+pushn 4
+start
+pushi 0
+storeg 0
+pushi 0
+storeg 1
+pushi 0
+storeg 2
+pushi 0
+storeg 3
+pushs "Introduza o valor do 1º lado: "
+writes
+read
+atoi
+storeg 0
+pushs "Introduza o valor do 2º lado: "
+writes
+read
+atoi
+storeg 1
+pushs "Introduza o valor do 3º lado: "
+writes
+read
+atoi
+storeg 2
+pushs "Introduza o valor do 4º lado: "
+writes
+read
+atoi
+storeg 3
+pushg 0
+pushg 1
+equal
+pushg 1
+pushg 2
+equal
+mul
+pushg 2
+pushg 3
+equal
+mul
+jz l0
+pushs "Estes lados formam um quadrado."
+writes
+pushs "\n"
+writes
+jump le0
+l0:
+pushs "Estes lados não podem formar um quadrado."
+writes
+pushs "\n"
+writes
+le0:
+stop
