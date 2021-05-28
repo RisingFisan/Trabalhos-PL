@@ -44,10 +44,6 @@ class Parser:
         "Commands : Command"
         p[0] = p[1]
 
-    def p_Attrib(self, p):
-        "Attrib : INTKW AttribsInt ';'"
-        p[0] = p[2]
-
     def p_Attrib_Array(self, p):
         "Attrib : INTKW ID '[' INT ']' ';'"
         if p[2] not in self.fp:
@@ -68,10 +64,6 @@ class Parser:
             raise SyntaxError
         p[0] = f"pushn {p[4]*p[7]}\n"
 
-    def p_Array(self, p):
-        "Array : '[' Elems ']' "
-        p[0] = p[2]
-
     def p_Array_2d(self, p):
         "Array2d : '[' Arrays ']'"
         p[0] = p[2]
@@ -87,6 +79,10 @@ class Parser:
     def p_Arrays_single(self, p):
         "Arrays : Array"
         p[0] = [p[1]]
+
+    def p_Array(self, p):
+        "Array : '[' Elems ']' "
+        p[0] = p[2]
 
     def p_Elems(self, p):
         "Elems : Elems ',' INT"
@@ -143,6 +139,9 @@ class Parser:
             for elem in row:
                 p[0] += f"pushi {elem}\n"
 
+    def p_Attrib(self, p):
+        "Attrib : INTKW AttribsInt ';'"
+        p[0] = p[2]
 
     def p_AttribsInt(self, p):
         "AttribsInt : AttribsInt ',' AttribInt"
@@ -155,9 +154,8 @@ class Parser:
     def p_AttribInt(self, p):
         """AttribInt : ID '=' Expression
                      | ID"""
-        i = self.stack_size
         if p[1] not in self.fp:
-            self.fp[p[1]] = (i,INT)
+            self.fp[p[1]] = (self.stack_size,INT)
             self.stack_size += 1
         else:
             print(f"Error in line {p.lineno(1)}: variable {p[1]} was previously declared.")
@@ -179,9 +177,8 @@ class Parser:
     def p_AttribFloat(self, p):
         """AttribFloat : ID '=' ExpressionF
                        | ID"""
-        i = self.stack_size
         if p[1] not in self.fp:
-            self.fp[p[1]] = (i,FLOAT)
+            self.fp[p[1]] = (self.stack_size,FLOAT)
             self.stack_size += 1
         else:
             print(f"Error in line {p.lineno(1)}: variable {p[1]} was previously declared.")
@@ -202,9 +199,8 @@ class Parser:
 
     def p_AttribString(self, p):
         "AttribString : ID '=' String ';'"
-        i = self.stack_size
         if p[1] not in self.fp:
-            self.fp[p[1]] = (i,STRING)
+            self.fp[p[1]] = (self.stack_size,STRING)
             self.stack_size += 1
         else:
             print(f"Error in line {p.lineno(1)}: variable {p[1]} was previously declared.")
@@ -476,6 +472,22 @@ pop 1
         "ExpressionF : ValueF"
         p[0] = p[1]
 
+    def p_Value_ID(self, p):
+        "Value : VAR"
+        p[0] = f"pushg {self.fp[p[1]][0]}\n"
+
+    def p_Value_INT(self, p):
+        "Value : INT"
+        p[0] = f"pushi {p[1]}\n"
+
+    def p_Value_str(self, p):
+        "Value : INTKW '(' String ')'"
+        p[0] = f"{p[3]}atoi\n"
+
+    def p_Value_float(self, p):
+        "Value : INTKW '(' ExpressionF ')'"
+        p[0] = f"{p[3]}ftoi\n"
+
     def p_ValueF_FLOAT(self, p):
         "ValueF : FLOAT"
         p[0] = f"pushf {p[1]}\n"
@@ -492,14 +504,6 @@ pop 1
         "ValueF : FLOATKW '(' Expression ')'"
         p[0] = f"{p[3]}itof\n"
 
-    def p_Value_ID(self, p):
-        "Value : VAR"
-        p[0] = f"pushg {self.fp[p[1]][0]}\n"
-
-    def p_Value_INT(self, p):
-        "Value : INT"
-        p[0] = f"pushi {p[1]}\n"
-
     def p_Value_ArrayElem(self, p):
         "Value : VARA '[' Expression ']'"
         p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}loadn\n"
@@ -507,14 +511,6 @@ pop 1
     def p_Value_Array2dElem(self, p):
         "Value : VARA '[' Expression ']' '[' Expression ']'"
         p[0] = f"pushgp\npushi {self.fp[p[1]][0]}\npadd\n{p[3]}pushi {self.fp[p[1]][2][1]}\nmul\n{p[6]}add\nloadn\n"
-
-    def p_Value_str(self, p):
-        "Value : INTKW '(' String ')'"
-        p[0] = f"{p[3]}atoi\n"
-
-    def p_Value_float(self, p):
-        "Value : INTKW '(' ExpressionF ')'"
-        p[0] = f"{p[3]}ftoi\n"
 
     def p_Logical_Comparisons(self, p):
         """Logical : Expression '>' Expression

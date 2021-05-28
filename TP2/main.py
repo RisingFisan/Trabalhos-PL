@@ -20,14 +20,14 @@ if len(sys.argv) < 2:
 elif sys.argv[1] == "-h" or sys.argv[1] == "--help":
     print("""Compilador da Linguagem Genérica Baseada nas Típicas Imperativas
 
-Uso do comando: python main.py [nome do ficheiro de input]
+Uso do comando: python main.py [nome do ficheiro de input] [nome do ficheiro de output]
 
-O nome do ficheiro de output será igual ao do ficheiro de input, com a extensão '.vm'.
+O nome do ficheiro de output será igual ao do ficheiro de input, com a extensão '.vm', caso não seja fornecido um nome.
 
 Se não for fornecido um ficheiro de input, o programa irá correr em modo "interativo", no qual é possível introduzir um pedaço de código no terminal e será apresentada a sua versão "compilada", em código-máquina.""")
 else:
     with open(sys.argv[1],"r") as f:
         result = parser.parser.parse(f.read())
     if result:
-        with open(sys.argv[1].strip(".\\").split('.')[0] + '.vm', "w", newline='\n') as r:
+        with open(sys.argv[1].strip(".\\").split('.')[0] + '.vm' if len(sys.argv) < 3 else sys.argv[2], "w", newline='\n') as r:
             r.write(result)
