@@ -398,9 +398,55 @@ class Parser:
         elif p[2] == '*': p[0] += "fmul\n"
         elif p[2] == '/': p[0] += "fdiv\n"
 
-    # def p_Expression_pow(self, p):
-    #     "Expression : Expression POW Expression"
-    #     p[0] = p[1] ** p[3]
+    def p_Expression_pow(self, p):
+        "Expression : Expression POW Expression"
+        p[0] = f"""pushi 1
+{p[3]}pow{self.labels_pow}:
+pushsp
+load -1
+pushi 0
+sup
+jz endpow{self.labels_pow}
+pushsp
+dup 1
+load -2
+{p[1]}mul
+store -2
+pushsp
+dup 1
+load -1
+pushi 1
+sub
+store -1
+jump pow{self.labels_pow}
+endpow{self.labels_pow}:
+pop 1
+"""
+
+    def p_ExpressionF_pow(self, p):
+        "ExpressionF : ExpressionF POW Expression"
+        p[0] = f"""pushf 1.0
+{p[3]}pow{self.labels_pow}:
+pushsp
+load -1
+pushi 0
+sup
+jz endpow{self.labels_pow}
+pushsp
+dup 1
+load -2
+{p[1]}fmul
+store -2
+pushsp
+dup 1
+load -1
+pushi 1
+sub
+store -1
+jump pow{self.labels_pow}
+endpow{self.labels_pow}:
+pop 1
+"""
 
     def p_Expression_uplus(self, p):
         """Expression : '+' Expression
@@ -606,3 +652,4 @@ class Parser:
         self.labels_if_else = 0
         self.labels_cycle = 0
         self.labels_cycle_exit = 0
+        self.labels_pow = 0
