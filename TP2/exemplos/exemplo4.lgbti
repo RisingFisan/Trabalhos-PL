@@ -1,0 +1,14 @@
+int cont = 0, i;
+int num;
+
+print("Indique os números naturais (insira 0 para parar):");
+for(i = 0; i < n && num != 0; i++) {
+    if num > 0 && num % 2 != 0{
+        cont++;
+        println(num);
+    }
+}
+
+print("Total: ");
+print(cont):
+println(" números ímpares.");
