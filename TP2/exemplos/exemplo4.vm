@@ -1,0 +1,54 @@
+pushi 0
+pushi 1
+dup 1
+dup 1
+sub
+swap
+sub
+start
+pushs "Indique os números naturais (insira 0 para parar):"
+writes
+pushs "\n"
+writes
+lc0:
+pushg 1
+pushi 0
+equal
+not
+jz lb0
+pushs ""
+writes
+read
+atoi
+storeg 1
+pushg 1
+pushi 0
+sup
+pushg 1
+pushi 2
+mod
+pushi 0
+equal
+not
+mul
+jz l0
+pushg 0
+pushi 1
+add
+storeg 0
+pushs "Este número é ímpar"
+writes
+pushs "\n"
+writes
+l0:
+jump lc0
+lb0:
+pushs "Total: "
+writes
+pushg 0
+writei
+pushs " números ímpares."
+writes
+pushs "\n"
+writes
+stop

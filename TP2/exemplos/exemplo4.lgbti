@@ -1,15 +1,15 @@
 int cont = 0;
-int num;
+int num = -1;
 
-print("Indique os números naturais (insira 0 para parar):");
+println("Indique os números naturais (insira 0 para parar):");
 while(num != 0) {
     num = int(input(""));
-    if num > 0 && num % 2 != 0{
+    if num > 0 && num % 2 != 0 {
         cont++;
-        println(num);
+        println("Este número é ímpar");
     }
 }
 
 print("Total: ");
-print(cont):
+print(cont);
 println(" números ímpares.");
