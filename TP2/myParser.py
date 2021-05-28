@@ -422,6 +422,7 @@ jump pow{self.labels_pow}
 endpow{self.labels_pow}:
 pop 1
 """
+        self.labels_pow += 1
 
     def p_ExpressionF_pow(self, p):
         "ExpressionF : ExpressionF POW Expression"
@@ -447,6 +448,7 @@ jump pow{self.labels_pow}
 endpow{self.labels_pow}:
 pop 1
 """
+        self.labels_pow += 1
 
     def p_Expression_uplus(self, p):
         """Expression : '+' Expression
