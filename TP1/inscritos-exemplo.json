@@ -1,0 +1,309 @@
+{
+    "inscritos":[
+       {
+          "nome":"Elliot Page",
+          "dataNasc":"21/02/87",
+          "morada":"Los Angeles, Estados Unidos",
+          "email":"elliotpagerulez@gmail.com",
+          "prova":"Ultra Rail",
+          "escalao":"MSeniors",
+          "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Roberta Elizabeth Marshall Cowell",
+        "dataNasc":"08/04/18",
+        "morada":"Reino Unido",
+        "email":"robertacowell@hotmail.com",
+        "prova":"Corrida",
+        "escalao":"F60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Laurence Michael Dillon",
+        "dataNasc":"01/05/15",
+        "morada":"Reino Unido",
+        "email":"dillion@gmail.com",
+        "prova":"Remo",
+        "escalao":"M60",
+        "equipa":"Transporte de Músculo"
+       }, {
+        "nome":"Nadia Almada",
+        "dataNasc":"28/01/77",
+        "morada":"Ribeira Brava, Madeira, Portugal",
+        "email":"nadiaalmada@bigbrotheruk.com",
+        "prova":"Ultra Rail",
+        "escalao":"F40",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Harry Allen",
+        "dataNasc":"02/12/22",
+        "morada":"Seattle, Washington",
+        "email":"harryallen@hotmail.com",
+        "prova":"Corrida",
+        "escalao":"M40",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Luke Anderson",
+        "dataNasc":"01/01/00",
+        "morada":"Estados Unidos",
+        "email":"luke-bigbrother@gmail.com",
+        "prova":"Ultra Rail",
+        "escalao":"MSeniors",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Lucy Hicks Anderson",
+        "dataNasc":"01/01/86",
+        "morada":"Waddy, Kentucky",
+        "email":"lucy3andyandy@gmail.com",
+        "prova":"Ultra Rail",
+        "escalao":"F60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Robina Asti",
+        "dataNasc":"07/04/21",
+        "morada":"Queens, New York",
+        "email":"robina.asti@fedora.com",
+        "prova":"Parapente",
+        "escalao":"F60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Elagabalus",
+        "dataNasc":"01/01/04",
+        "morada":"Roma",
+        "email":"antonius.rome.sux@hotmail.com",
+        "prova":"Triátlo",
+        "escalao":"MJúnior",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Joanne Marie Conte",
+        "dataNasc":"18/10/33",
+        "morada":"Estados Unidos",
+        "email":"jconte@uscitycouncil.com",
+        "prova":"Triátlo",
+        "escalao":"F60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Sister Mary Elizabeth Clark",
+        "dataNasc":"16/06/31",
+        "morada":"",
+        "email":"mclark@sistersforaids.us",
+        "prova":"Remo",
+        "escalao":"F60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Sir Ewan Forbes, 11th Baronet",
+        "dataNasc":"06/11/91",
+        "morada":"Aberdeenshire, Scotland",
+        "email":"11thbaronet@royalty.scot",
+        "prova":"Corrida",
+        "escalao":"M60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Crystal Frasier",
+        "dataNasc":"01/01/89",
+        "morada":"Estados Unidos",
+        "email":"crystal1234@pathfinder.com",
+        "prova":"Ultra Rail",
+        "escalao":"F45",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Ketty Gabriele",
+        "dataNasc":"10/07/1981",
+        "morada":"Nápoles, Itália",
+        "email":"ketty@italianmafia.it",
+        "prova":"Corta-mato",
+        "escalao":"F40",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Phyllis Frye",
+        "dataNasc":"01/01/46",
+        "morada":"San Antonio, Texas",
+        "email":"phyllisf@mpjudge.us",
+        "prova":"Remo",
+        "escalao":"F60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"General Tito Aníbal da Paixão Gomes",
+        "dataNasc":"01/01/1933",
+        "morada":"Funchal, Madeira",
+        "email":"generalgomes@scams.com",
+        "prova":"Corta-mato",
+        "escalao":"M60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Nicole Maines",
+        "dataNasc":"07/10/97",
+        "morada":"Gloversville, New York, Estados Unidos",
+        "email":"nicolemaines@supergirl.com",
+        "prova":"Ultra Rail",
+        "escalao":"FSeniors",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Nikkie de Jager",
+        "dataNasc":"02/03/1994",
+        "morada":"Wageningen, Holanda",
+        "email":"nikkielovely@nikkietutorials.com",
+        "prova":"Arco e Flecha",
+        "escalao":"FSeniors",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Chelsea Manning",
+        "dataNasc":"17/12/87",
+        "morada":"Crescent, Oklahoma, Estados Unidos",
+        "email":"cmanning@whistleblower.us",
+        "prova":"Arco e Flecha",
+        "escalao":"FSeniors",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Joyita Mondal",
+        "dataNasc":"08/07/17",
+        "morada":"West Bengal, India",
+        "email":"joyitam@judges.in",
+        "prova":"Arco e Flecha",
+        "escalao":"FSeniors",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Tracey Norman",
+        "dataNasc":"01/01/52",
+        "morada":"Newark, New Jersey",
+        "email":"tnorman@fashionafrica.us",
+        "prova":"Corrida",
+        "escalao":"F60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Caroline Paige",
+        "dataNasc":"01/01/59",
+        "morada":"Reino Unido",
+        "email":"fl_coldwarbadass@armedforces.uk",
+        "prova":"Ultra Rail",
+        "escalao":"F60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Charley Parkhurst",
+        "dataNasc":"01/01/12",
+        "morada":"Sharon, Vermont",
+        "email":"oneeyedcharley@sixhorsecharley@gmail.com",
+        "prova":"Equitação",
+        "escalao":"M60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Stu Rasmussen",
+        "dataNasc":"01/01/48",
+        "morada":"Silverton, Oregon",
+        "email":"stu@oregonmayor.com",
+        "prova":"Equitação",
+        "escalao":"M60",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Eliana Rubashkyn",
+        "dataNasc":"25/06/88",
+        "morada":"Nova Zelândia",
+        "email":"eliana@hotmail.com",
+        "prova":"Arco e Flecha",
+        "escalao":"FSeniors",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Anne Viriato",
+        "dataNasc":"19/04/97",
+        "morada":"Brazil",
+        "email":"aviriato@mma.br",
+        "prova":"MMA",
+        "escalao":"FSeniors",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Natalie Wynn",
+        "dataNasc":"21/19/88",
+        "morada":"Arlington County, Virginia, Estados Unidos",
+        "email":"main@contrapoints.yt",
+        "prova":"Arco e Flecha",
+        "escalao":"FSeniors",
+        "equipa":"Transporte de Músculo"
+       },{
+        "nome":"Steven Rogers",
+        "dataNasc":"04/07/44",
+        "morada":"Lower East Side, Nova York",
+        "email":"captainamerica@marvel.com",
+        "prova":"Ginástica Rítmica",
+        "escalao":"M60",
+        "equipa":"Marvel's Avengers"
+       },{
+        "nome":"Anthony Edward Stark",
+        "dataNasc":"29/05/70",
+        "morada":"New York",
+        "email":"ironmanisamazing@starkrulez.com",
+        "prova":"Parapente",
+        "escalao":"M50",
+        "equipa":"Marvel's Avengers"
+       },{
+        "nome":"Thor Odinson",
+        "dataNasc":"01/01/64",
+        "morada":"Asgard",
+        "email":"uhhthor@marvel.com",
+        "prova":"Levantamento de Peso",
+        "escalao":"M60",
+        "equipa":"Marvel's Avengers"
+       },{
+        "nome":"Bruce Banner",
+        "dataNasc":"18/12/69",
+        "morada":"New York",
+        "email":"bbanner@marvel.com",
+        "prova":"Corrida",
+        "escalao":"M50",
+        "equipa":"Marvel's Avengers"
+       },{
+        "nome":"The Hulk",
+        "dataNasc":"18/12/69",
+        "morada":"New York",
+        "email":"bbanner@marvel.com",
+        "prova":"MMA",
+        "escalao":"M50",
+        "equipa":"Marvel's Avengers"
+       },{
+        "nome":"Clinton Francis Barton",
+        "dataNasc":"01/01/01",
+        "morada":"New York",
+        "email":"hawkeye@marvel.com",
+        "prova":"Arco e Flecha",
+        "escalao":"MSeniors",
+        "equipa":"Marvel's Avengers"
+       },{
+        "nome":"Natalia Alianovna Romanoff",
+        "dataNasc":"01/01/84",
+        "morada":"New York",
+        "email":"blackwidow@marvel.com",
+        "prova":"Atletismo",
+        "escalao":"FSeniors",
+        "equipa":"Marvel's Avengers"
+       },{
+        "nome":"Bruce Wayne",
+        "dataNasc":"17/04/78",
+        "morada":"Gotham, Estados Unidos",
+        "email":"batman@dc.com",
+        "prova":"Ginástica Rítmica",
+        "escalao":"MSeniors",
+        "equipa":"DC Comics"
+       },{
+        "nome":"Clark Kent",
+        "dataNasc":"18/04/77",
+        "morada":"Krypton",
+        "email":"superman@dc.com",
+        "prova":"Parapente",
+        "escalao":"MSeniors",
+        "equipa":"DC Comics"
+       },{
+        "nome":"Arthur Fleck",
+        "dataNasc":"21/11/46",
+        "morada":"Gotham",
+        "email":"joker@dc.com",
+        "prova":"Handball",
+        "escalao":"MSeniors",
+        "equipa":"DC Comics"
+       },{
+        "nome":"Alexander Joseph Luthor",
+        "dataNasc":"11/07/72",
+        "morada":"Smallville",
+        "email":"lexluthor@dc.com",
+        "prova":"Natação",
+        "escalao":"MSeniors",
+        "equipa":"DC Comics"
+       }
+    ]
+}
