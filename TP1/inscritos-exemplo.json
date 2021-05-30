@@ -304,6 +304,125 @@
         "prova":"Natação",
         "escalao":"MSeniors",
         "equipa":"DC Comics"
-       }
-    ]
+       },{
+         "nome":"Hugo Pierre Leclercq",
+         "dataNasc":"30/05/94",
+         "morada":"Nantes, France",
+         "email":"madeon@earpark.fr",
+         "prova":"Dança Rítmica",
+         "escalao":"MSeniors",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Behdad Nejatbakhshe",
+         "dataNasc":"01/01/01",
+         "morada":"Paris, França",
+         "email":"upper@most.fr",
+         "prova":"Natação",
+         "escalao":"MSeniors",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Pierre David Guetta",
+         "dataNasc":"07/11/67",
+         "morada":"Paris, França",
+         "email":"davidguetta@",
+         "prova":"Corta-mato",
+         "escalao":"M50",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Christophe Le Friant ",
+         "dataNasc":"10/05/69",
+         "morada":"Bois-Colombes, France",
+         "email":"bob@sinclair.com",
+         "prova":"Ultra Rail",
+         "escalao":"M50",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"William Sami Étienne Grigahcine",
+         "dataNasc":"13/07/86",
+         "morada":"Paris, França",
+         "email":"snake@dj.fr",
+         "prova":"Ultra Rail",
+         "escalao":"MSeniors",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Anthony Kaela Berry Lawlor",
+         "dataNasc":"01/01/99",
+         "morada":"Antibes, Alpes-Maritimes",
+         "email":"m83@goodmusic.fr",
+         "prova":"Natação",
+         "escalao":"MSub23",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Vincent Belorgey",
+         "dataNasc":"31/07/75",
+         "morada":"Seine-Saint-Denis, France",
+         "email":"kavinsky@80smusic.fr",
+         "prova":"Corta-mato",
+         "escalao":"M45",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Jean-Yves Prieur",
+         "dataNasc":"16/06/64",
+         "morada":"Antony, Hauts-de-Seine, France",
+         "email":"kid@loco.fr",
+         "prova":"Arco e Flecha",
+         "escalao":"M55",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Thibaut Berland",
+         "dataNasc":"03/10/81",
+         "morada":"Paris, França",
+         "email":"breakbot@tunez.fr",
+         "prova":"Danla Rítmica",
+         "escalao":"MSeniors",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Guy-Manuel de Homem-Cristo",
+         "dataNasc":"08/02/74",
+         "morada":"Neuilly-sur-Seine",
+         "email":"daft@daftpunk.fr",
+         "prova":"Corrida",
+         "escalao":"M45",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Thomas Bangalter",
+         "dataNasc":"03/01/75",
+         "morada":"",
+         "email":"daft@daftpunk.fr",
+         "prova":"Natação",
+         "escalao":"M45",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Sonny John Moore",
+         "dataNasc":"15/01/88",
+         "morada":"Highland Park, Los Angeles, Califórnia, EUA",
+         "email":"skrillex@hotmail.fr",
+         "prova":"Dança Rítmica",
+         "escalao":"MSeniors",
+         "equipa":"EDM Hurricanes"
+        },{
+         "nome":"Staff Sergeant Reckless",
+         "dataNasc":"13/05/48",
+         "morada":"Mongólia",
+         "email":"imjust@ahorse.com",
+         "prova":"Equitação",
+         "escalao":"FSub23",
+         "equipa":"Os Onomatopeias"
+        },{
+         "nome":"Wojtek",
+         "dataNasc":"01/01/42",
+         "morada":"Hamadan, Iran",
+         "email":"battlebear@ww2.pl",
+         "prova":"Levantamento de Peso",
+         "escalao":"MSub23",
+         "equipa":"Os Onomatopeias"
+        },{
+         "nome":"Acoustic Kitty",
+         "dataNasc":"01/01/67",
+         "morada":"Soviet Embassy",
+         "email":"spy_cat@cia.us",
+         "prova":"Corta-mato",
+         "escalao":"MSub23",
+         "equipa":"Os Onomatopeias"
+        }
 }
