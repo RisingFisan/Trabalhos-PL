@@ -1,0 +1,21 @@
+int a[3] = [2,3,1];
+int i, j, min, temp;
+
+for(i = 0; i < 3; i++) {
+    min = i;
+    for(j = i+1; j < 3; j++) {
+        if a[j] < a[i] {
+            min = j;
+        }
+    }
+    temp = a[min];
+    a[min] = a[i];
+    a[i] = temp;
+}
+
+print("[");
+for(i = 0; i < 3; i++) {
+    print(a[i]);
+    print(",");
+}
+println("]");

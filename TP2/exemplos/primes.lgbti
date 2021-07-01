@@ -1,0 +1,17 @@
+int n;
+int i, j;
+int isPrime;
+n = int(input("Maximum value: "));
+
+for(i = 2; i <= n; i++) {
+    isPrime = 1;
+    for(j = 2; j < i - 1; j++) {
+        if i % j == 0 {
+            isPrime = 0;
+        }
+    }
+    if isPrime == 1 {
+        print(i);
+        println(" is prime.");
+    }
+}

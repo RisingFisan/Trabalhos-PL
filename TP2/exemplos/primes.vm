@@ -1,0 +1,61 @@
+pushi 0
+pushi 0
+pushi 0
+pushi 0
+start
+pushs "Maximum value: "
+writes
+read
+atoi
+storeg 0
+pushi 2
+storeg 1
+lc1:
+pushg 1
+pushg 0
+infeq
+jz lb1
+pushi 1
+storeg 3
+pushi 2
+storeg 2
+lc0:
+pushg 2
+pushg 1
+pushi 1
+sub
+inf
+jz lb0
+pushg 1
+pushg 2
+mod
+pushi 0
+equal
+jz l0
+pushi 0
+storeg 3
+l0:
+pushg 2
+pushi 1
+add
+storeg 2
+jump lc0
+lb0:
+pushg 3
+pushi 1
+equal
+jz l1
+pushg 1
+writei
+pushs " is prime."
+writes
+pushs "\n"
+writes
+l1:
+pushg 1
+pushi 1
+add
+storeg 1
+jump lc1
+lb1:
+stop
